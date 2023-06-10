@@ -1,0 +1,109 @@
+﻿@model IEnumerable<ASP.NET_RealEstateManagement.Models.EstateAgentDTO>
+@{
+    Boolean isAdmin = ViewBag.IsAdmin;
+    ViewBag.Title = "index";
+}
+<style>
+    .Task_container {
+        margin-top:5em;
+        margin-left:7em;
+        margin-right:7em;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 2em;
+        flex-wrap: wrap;
+    }
+
+    .Task_Property_Container {
+        flex-basis: calc(50% - 3em );
+        position:relative;
+        display: flex;
+        flex-direction:column;
+        border-radius: 15px;
+        border: 2px solid black;
+        padding: 3em;
+    }
+    .Task_Property_Container form{
+        margin-left:1em;
+        margin-top:1em;
+    }
+    .Task_Property_Container input[type="text"]{
+        width: 300px;
+        border:3px solid black;
+
+    }
+    .Task_Property_Container input[type="submit"]{
+        margin-left:1em;
+        padding: 3px 10px;
+        border-radius:15px;
+    }
+    .Task_Agent_Container {
+        position: relative;
+        flex-basis: calc(50% - 3em );
+        display: flex;
+        flex-direction: column;
+        border-radius: 15px;
+        border: 2px solid black;
+        padding: 3em;
+    }
+    .Task_Agent_Container input[type="text"] {
+        width: 300px;
+        border: 3px solid black;
+    }
+    .Task_Agent_Container form {
+        margin-left: 1em;
+        margin-top: 1em;
+    }
+
+    .Task_Agent_Container input[type="text"] {
+        width: 300px;
+        border: 3px solid black;
+    }
+
+    .Task_Agent_Container input[type="submit"] {
+        margin-left: 1em;
+        padding: 3px 10px;
+        border-radius: 15px;
+    }
+    .btn_add{
+        position:absolute;
+        top:10px;
+        right:10px;
+        width: 10em;
+        height:2em;
+        
+    }
+
+</style>
+<h2>Admin Page</h2>
+@if (isAdmin)
+{
+<div class="Task_container">
+    <div class="Task_Property_Container">
+        <h2>Property Details:</h2> <button class="btn_add"><a href="/Admin/AddNewProperty">Add Property</a></button>
+        <form method="GET" action="/Admin">
+            <input type="text" name="Searchproperty" />
+            <input type="submit" value="Search" />
+        </form>
+    </div>
+    <div class="Task_Agent_Container">
+        <h2>Agents Details:</h2> <button class="btn_add"><a href="/Admin/AddNewAgent">Add Agent</a></button>
+        <form method="GET" action="/Admin">
+            <input type="text" name="Searchproperty" />
+            <input type="submit" value="Search" />
+        </form>
+        @foreach (var agent in Model)
+                {
+                    <div>@agent.Name</div>
+                }
+    </div>
+</div>
+}
+else { 
+    <div class="NotAdmin_Error">
+    ERROR :  You dont have the permisssion as Admin , Please Go back to <a href="/">HOME PAGE</a>
+    </div>
+}
+
+    

@@ -1,0 +1,20 @@
+﻿@{
+    Boolean IsAdmin = ViewBag.IsAdmin;
+    ViewBag.Title = "Home Page";
+}
+
+<div class="image-container">
+   
+    <img class="image" src="~/Photos/Front-page.jpg" alt="wallpaper" />
+    <div class="content_container">
+        <p class="title">As Real Estate Agent, We help thousand homewoner to get their house every month. </p>
+        <p class="sub-title">Our new Real Estate Management App, It designed to help those who are intrested in seacrching new house in our ecosystem , and our real estate agents can track on their stuff.</p>
+    </div>
+    <div class="btn_container">
+        <span>Are You</span> <button><a href="/Client">Our Client</a></button><span>-</span><button><a href="/Agent">Our Agents</a></button> 
+        @if (@IsAdmin)
+        {
+            <span>-</span><button class="admin_btn"><a href="/Admin">Admin</a></button>
+        }<span>?</span>
+    </div>
+</div>
