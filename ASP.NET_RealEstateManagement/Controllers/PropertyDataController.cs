@@ -38,5 +38,17 @@ namespace ASP.NET_RealEstateManagement.Controllers
             return Ok(propertyDetailsDTO);
         }
 
+        [HttpPost]
+        [ResponseType(typeof(PropertyDetail))]
+        public IHttpActionResult AddNewProperty(PropertyDetail property)
+        {
+            if(!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            db.PropertyDetails.Add(property);
+            db.SaveChanges();
+            return CreatedAtRoute("DefaultApi", new { id = property.PropertyID }, property);
+        }
     }
 }

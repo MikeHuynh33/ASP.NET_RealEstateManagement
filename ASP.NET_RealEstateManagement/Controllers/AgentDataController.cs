@@ -31,5 +31,18 @@ namespace ASP.NET_RealEstateManagement.Controllers
                 })); ;
             return Ok(estateAgentDTO);
         }
+
+        [HttpPost]
+        [ResponseType(typeof(EstateAgent))]
+        public IHttpActionResult AddNewProperty(EstateAgent agent)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            db.EstateAgents.Add(agent);
+            db.SaveChanges();
+            return CreatedAtRoute("DefaultApi", new { id = agent.EstateAgentId }, agent);
+        }
     }
 }
