@@ -30,10 +30,22 @@ namespace ASP.NET_RealEstateManagement.Controllers
             }
             ViewBag.IsAdmin = isAdmin;
 
-            string url = "AdminData/Agent";
+            string url = "AgentData/ListAgents";
             HttpResponseMessage response = client.GetAsync(url).Result;
             IEnumerable<EstateAgentDTO> agents = response.Content.ReadAsAsync<IEnumerable<EstateAgentDTO>>().Result;
-            return View(agents);
+
+            string sec_url = "PropertyData/ListPropertyies";
+            HttpResponseMessage sec_response = client.GetAsync(sec_url).Result;
+            IEnumerable<PropertyDetailDTO> properties = sec_response.Content.ReadAsAsync<IEnumerable<PropertyDetailDTO>>().Result;
+
+            AgentsAndPropertiesViewModel viewModel = new AgentsAndPropertiesViewModel
+            {
+                Agents = agents,
+                Properties = properties
+            };
+
+
+            return View(viewModel);
         }
     }
 }
