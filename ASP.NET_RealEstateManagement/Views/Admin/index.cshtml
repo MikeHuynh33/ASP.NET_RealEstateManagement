@@ -147,7 +147,7 @@
                         @property.PropertyAddress
                     </div>
                     <div class="property_btn">
-                        <a href='/Admin/View/@property.PropertyID'>View</a><a  href='/Admin/Edit/@property.PropertyID' >Edit</a><a  href='/Admin/Delete/@property.PropertyID'>Delete</a>
+                        <a href='/Admin/PropertyDetail/@property.PropertyID'>View</a><a  href='/Admin/PropertyEdit/@property.PropertyID'>Edit</a><a  href='/Admin/DeleteConfirm/@property.PropertyID'>Delete</a>
                     </div>
                 </div>
             }
@@ -165,7 +165,7 @@
                         @agent.Name | @agent.Email | @agent.Role
                     </div>
                     <div class="agent_btn">
-                        <a>View</a><a>Edit</a><a>Delete</a>
+                        <a href='/Admin/AgentDetail/@agent.EstateAgentId' >View</a><a href='/Admin/AgentEdit/@agent.EstateAgentId'>Edit</a><a href='/Admin/DeleteAgentConfirm/@agent.EstateAgentId'>Delete</a>
                     </div>
                 </div>
             }
