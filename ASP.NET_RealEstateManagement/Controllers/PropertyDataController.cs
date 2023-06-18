@@ -10,6 +10,8 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
 using System.Web.Routing;
+using Newtonsoft.Json.Linq;
+using System.Data.Entity.Core.Metadata.Edm;
 
 namespace ASP.NET_RealEstateManagement.Controllers
 {
@@ -60,10 +62,45 @@ namespace ASP.NET_RealEstateManagement.Controllers
       
         [ResponseType(typeof(PropertyDetailDTO))]
         [HttpGet]
+        public IHttpActionResult FindPropertyAssociateWithAgent(int? id)
+        {
+            PropertyDetail foundproperty = db.PropertyDetails.Include(p => p.Agents).SingleOrDefault(p => p.PropertyID == id);
+            var agents = foundproperty.Agents.ToList();
+            PropertyDetailDTO propertyDTO = new PropertyDetailDTO()
+            {
+                PropertyID = foundproperty.PropertyID,
+                PropertyType = foundproperty.PropertyType,
+                PropertyAddress = foundproperty.PropertyAddress,
+                PropertySize = foundproperty.PropertySize,
+                NumberOfBedrooms = foundproperty.NumberOfBedrooms,
+                NumberOfBathrooms = foundproperty.NumberOfBathrooms,
+                Amenities = foundproperty.Amenities,
+                PropertyPrice = foundproperty.PropertyPrice,
+                PropertyDescription = foundproperty.PropertyDescription,
+                PropertyStatus = foundproperty.PropertyStatus,
+                ListingDate = foundproperty.ListingDate,
+                Agents = agents.Select(agent => new EstateAgentDTO
+                {
+                    EstateAgentId = agent.EstateAgentId,
+                    Name = agent.Name,
+                    Email = agent.Email,
+                    Phone = agent.Phone,
+                    Role = agent.Role
+                }).ToList()
+            };
+            if (foundproperty == null)
+            {
+                return NotFound();
+                
+            }
+            return Ok(propertyDTO);
+        }
+
+        [ResponseType(typeof(PropertyDetailDTO))]
+        [HttpGet]
         public IHttpActionResult FindProperty(int? id)
         {
             PropertyDetail foundproperty = db.PropertyDetails.Find(id);
-            
             PropertyDetailDTO propertyDTO = new PropertyDetailDTO()
             {
                 PropertyID = foundproperty.PropertyID,
@@ -81,7 +118,7 @@ namespace ASP.NET_RealEstateManagement.Controllers
             if (foundproperty == null)
             {
                 return NotFound();
-                
+
             }
             return Ok(propertyDTO);
         }
@@ -135,6 +172,28 @@ namespace ASP.NET_RealEstateManagement.Controllers
         private bool PropertyExists(int id)
         {
             return db.PropertyDetails.Count(e => e.PropertyID == id) > 0;
+        }
+
+        [HttpPost]
+        public IHttpActionResult PropertyUpdateAgents ([FromBody] JObject payload)
+        {
+            int propertyID = payload["PropertyID"].ToObject<int>();
+            JArray agentSelected = (JArray)payload["AgentSelected"];
+            int[] agentIds = agentSelected.ToObject<int[]>();
+            // get all agents ID have association with PropertyId .
+            PropertyDetail foundproperty = db.PropertyDetails.Include(p => p.Agents).SingleOrDefault(p => p.PropertyID == propertyID);
+            // delete all the relationships
+             foundproperty.Agents.Clear();
+            // get new agents from checkbox array
+            List<EstateAgent> newAgents = db.EstateAgents.Where(a => agentIds.Contains(a.EstateAgentId)).ToList();
+            // add all updated agents list back to property collection.
+            foreach (EstateAgent agent in newAgents)
+            {
+                foundproperty.Agents.Add(agent);
+            }
+            db.SaveChanges();
+
+            return Ok();
         }
     }
 }

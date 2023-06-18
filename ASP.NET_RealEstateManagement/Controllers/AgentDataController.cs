@@ -56,6 +56,42 @@ namespace ASP.NET_RealEstateManagement.Controllers
             return Ok(agentDTO);
         }
 
+        [ResponseType(typeof(EstateAgentDTO))]
+        [HttpGet]
+        public IHttpActionResult FindAgentAssociateWithProperty(int? id)
+        {
+            EstateAgent foundagent = db.EstateAgents.Include(a=> a.Properties).SingleOrDefault(p => p.EstateAgentId == id); ;
+            var properties = foundagent.Properties.ToList();
+            EstateAgentDTO agentDTO = new EstateAgentDTO()
+            {
+                EstateAgentId = foundagent.EstateAgentId,
+                Name = foundagent.Name,
+                Email = foundagent.Email,
+                Phone = foundagent.Phone,
+                Role = foundagent.Role,
+                Properties = properties.Select(property => new PropertyDetailDTO
+                {
+                    PropertyID = property.PropertyID,
+                    PropertyType = property.PropertyType,
+                    PropertyAddress = property.PropertyAddress,
+                    PropertySize = property.PropertySize,
+                    NumberOfBedrooms = property.NumberOfBedrooms,
+                    NumberOfBathrooms = property.NumberOfBathrooms,
+                    Amenities = property.Amenities,
+                    PropertyPrice = property.PropertyPrice,
+                    PropertyDescription = property.PropertyDescription,
+                    PropertyStatus = property.PropertyStatus,
+                    ListingDate = property.ListingDate,
+                }).ToList()
+            };
+            if (foundagent == null)
+            {
+                return NotFound();
+
+            }
+            return Ok(agentDTO);
+        }
+
         [ResponseType(typeof(void))]
         [HttpPost]
         public IHttpActionResult UpdateAgent(int id, EstateAgent agent)

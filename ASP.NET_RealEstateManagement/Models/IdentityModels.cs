@@ -28,6 +28,7 @@ namespace ASP.NET_RealEstateManagement.Models
         // Translate PropertyDetail.cs into PropertyDetails table
         public DbSet<PropertyDetail> PropertyDetails { get; set; }
         public DbSet<EstateAgent> EstateAgents { get; set; }
+        
         public static ApplicationDbContext Create()
         {
             return new ApplicationDbContext();

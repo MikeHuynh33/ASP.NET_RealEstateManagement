@@ -53,9 +53,6 @@ namespace ASP.NET_RealEstateManagement.Controllers
             return View(viewModel);
         }
 
-   
-
-
         //GET /AddNewProperty Create Form View.  
         [HttpGet]
         [Route("/Admin/AddNewProperty")]
@@ -70,13 +67,20 @@ namespace ASP.NET_RealEstateManagement.Controllers
         [Route("/Admin/PropertyDetail/{id}")]
         public ActionResult PropertyDetail(int id) {
 
-            string url = "PropertyData/FindProperty/" + id;
+            string url = "PropertyData/FindPropertyAssociateWithAgent/" + id;
             HttpResponseMessage response = client.GetAsync(url).Result;
-            Debug.WriteLine("The response code is ");
-            Debug.WriteLine(response.StatusCode);
             PropertyDetailDTO foundproperty = response.Content.ReadAsAsync<PropertyDetailDTO>().Result;
-                
-            return View(foundproperty);
+
+            string sub_url = "AgentData/ListAgents";
+            HttpResponseMessage sec_response = client.GetAsync(sub_url).Result;
+            IEnumerable<EstateAgentDTO> agents = sec_response.Content.ReadAsAsync<IEnumerable<EstateAgentDTO>>().Result;
+
+            PropertyDetailAndAllAgentsViewModel PropertyAndAgent= new PropertyDetailAndAllAgentsViewModel
+            {
+                Properties = foundproperty,
+                AllAgents = agents
+            };
+            return View(PropertyAndAgent);
         }
         
         //POST: Admin Adding new Property
@@ -165,12 +169,54 @@ namespace ASP.NET_RealEstateManagement.Controllers
             }
         }
 
+        //POST /Admin/PropertyUpdateAgents Updating New List of Agents.
+        [HttpPost]
+        [Route("/Admin/PropertyUpdateAgents")]
+        public ActionResult PropertyUpdateAgents(int propertyID, string[] agentSelected)
+        {
+            var payload = new
+            {
+                PropertyID = propertyID,
+                AgentSelected = agentSelected
+            };
+            string url = "PropertyData/PropertyUpdateAgents";
+            string jsonpayload = jss.Serialize(payload);
+            HttpContent content = new StringContent(jsonpayload);
+            content.Headers.ContentType.MediaType = "application/json";
+            HttpResponseMessage response = client.PostAsync(url, content).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                return RedirectToAction("/PropertyDetail/" + propertyID);
+            }
+            else
+            {
+                return RedirectToAction("Error");
+            }
+           
+        }
+
+
         //GET /AddNewAgent Create Form View.  
         [HttpGet]
         [Route("/Admin/AddNewAgent")]
         public ActionResult AddNewAgent()
         {
             return View();
+        }
+
+        //GET /Admin/Property/Id
+        [HttpGet]
+        [Route("/Admin/AgentDetail/{id}")]
+        public ActionResult AgentDetail(int id)
+        {
+
+            string url = "PropertyData/FindAgentAssociateWithProperty/" + id;
+            HttpResponseMessage response = client.GetAsync(url).Result;
+            Debug.WriteLine("The response code is ");
+            Debug.WriteLine(response.StatusCode);
+            EstateAgentDTO foundagent= response.Content.ReadAsAsync<EstateAgentDTO>().Result;
+
+            return View(foundagent);
         }
 
         //POST: Admin Adding new Agent 

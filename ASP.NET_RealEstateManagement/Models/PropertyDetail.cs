@@ -37,5 +37,7 @@ namespace ASP.NET_RealEstateManagement.Models
         public string PropertyDescription { get; set; }
         public string PropertyStatus { get; set; }
         public DateTime ListingDate { get; set; }
+
+        public List<EstateAgentDTO> Agents { get; set; }
     }
 }

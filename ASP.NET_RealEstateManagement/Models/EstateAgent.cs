@@ -25,5 +25,7 @@ namespace ASP.NET_RealEstateManagement.Models
         public string Email { get; set; }
         public string Phone { get; set; }
         public string Role { get; set; }
+
+        public List<PropertyDetailDTO> Properties { get; set; }
     }
 }
