@@ -12,6 +12,8 @@ using System.Web.Http.Description;
 using System.Web.Routing;
 using Newtonsoft.Json.Linq;
 using System.Data.Entity.Core.Metadata.Edm;
+using System.IO;
+using System.Web;
 
 namespace ASP.NET_RealEstateManagement.Controllers
 {
@@ -110,6 +112,7 @@ namespace ASP.NET_RealEstateManagement.Controllers
                 NumberOfBedrooms = foundproperty.NumberOfBedrooms,
                 NumberOfBathrooms = foundproperty.NumberOfBathrooms,
                 Amenities = foundproperty.Amenities,
+                ImageFileNames = foundproperty.ImageFileNames,
                 PropertyPrice = foundproperty.PropertyPrice,
                 PropertyDescription = foundproperty.PropertyDescription,
                 PropertyStatus = foundproperty.PropertyStatus,
@@ -127,7 +130,7 @@ namespace ASP.NET_RealEstateManagement.Controllers
         [HttpPost]
         public IHttpActionResult UpdateProperty(int id, PropertyDetail property)
         {
-
+            
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);

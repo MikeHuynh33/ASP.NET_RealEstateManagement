@@ -12,7 +12,8 @@
     .property_header{
         flex-basis: calc(100% - 3em);
         border:2px solid black;
-        font-size:2em;
+        font-size:2.5em;
+        padding:0.4em;
         text-align:center;
     }
     .property_body {
@@ -51,8 +52,28 @@
         overflow-y: scroll;
         margin-left: 1.5em;
     }
+    .btn_edit_agent{
+        margin-top:15px;
+        padding: 0.3em 1em;
+        border:2px solid black;
+        border-radius:15px;
+    }
+    .btn_edit_agent:hover{
+        background-color:#ff8c00;
+        font-weight:bolder;
+    }
+    .headingline{
+        margin-left:1em;
+        font-weight: bold;
+    }
+    .btn_back {
+        padding: 5px 10px;
+        margin-left: 2em;
+        font-size:1em;
+    }
 </style>
-<h2>PropertyDetail</h2>
+<h2 class="headingline"><a class="btn_back" href=".."> < </a> PropertyDetail </h2>
+   
 <div class="PropertyDetail_container">
     <div class="property_header">Address: @Model.Properties.PropertyAddress</div>
     <div class="property_body">
@@ -112,7 +133,7 @@
                         }
                     }
                 </div>
-                <button type="submit">Submit</button>
+                <button class="btn_edit_agent" type="submit">Assign Agents</button>
             </form>
         </div>
 

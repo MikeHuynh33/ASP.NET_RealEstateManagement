@@ -3,7 +3,7 @@
     ViewBag.Title = "PropertyEdit";
 }
 
-<h2>PropertyEdit</h2>
+
 
 <style>
 
@@ -62,11 +62,13 @@
         margin-top: 1em;
         font-weight: 600;
     }
+    #ImageFileText {
+        width: 280%;
+    }
 </style>
-<h2>AddNewProperty</h2>
-
+<h2>PropertyEdit</h2> 
 <div class="newProperty_Form_container">
-    <form method="Post" action="/Admin/PropertyUpdate/@Model.PropertyID">
+    <form method="Post" action="/Admin/PropertyUpdate/@Model.PropertyID" enctype = "multipart/form-data">
         <div class="row">
             <div class="col-6">
                 <input type="hidden" id="propertyID" name="propertyID" value="@Model.PropertyID" />
@@ -78,45 +80,59 @@
         <div class="row">
             <div class="col-6">
                 <label for="propertyType">Property Type:</label>
-                <input type="text" id="propertyType" name="propertyType"  value="@Model.PropertyType" required>
+                <input type="text" id="propertyType" name="propertyType" value="@Model.PropertyType" required>
             </div>
             <div class="col-6">
                 <label for="propertySize">Property Size:</label>
-                <input type="text" id="propertySize" name="propertySize"  value="@Model.PropertySize" required>
+                <input type="text" id="propertySize" name="propertySize" value="@Model.PropertySize" required>
             </div>
         </div>
         <div class="row">
             <div class="col-6">
                 <label for="numberOfBedrooms">Number of Bedrooms:</label>
-                <input type="number" id="numberOfBedrooms" name="numberOfBedrooms"  value="@Model.NumberOfBedrooms" required>
+                <input type="number" id="numberOfBedrooms" name="numberOfBedrooms" value="@Model.NumberOfBedrooms" required>
             </div>
             <div class="col-6">
                 <label for="numberOfBathrooms">Number of Bathrooms:</label>
-                <input type="number" id="numberOfBathrooms" name="numberOfBathrooms"  value="@Model.NumberOfBathrooms" required>
+                <input type="number" id="numberOfBathrooms" name="numberOfBathrooms" value="@Model.NumberOfBathrooms" required>
             </div>
         </div>
         <div class="row">
             <div class="col-6">
                 <label for="amenities">Amenities:</label>
-                <input type="text" id="amenities" name="amenities"  value="@Model.Amenities" required>
+                <input type="text" id="amenities" name="amenities" value="@Model.Amenities" required>
             </div>
             <div class="col-6">
                 <label for="propertyPrice">Property Price:</label>
-                <input type="number" id="propertyPrice" name="propertyPrice"  value="@Model.PropertyPrice" step="0.01" required>
+                <input type="number" id="propertyPrice" name="propertyPrice" value="@Model.PropertyPrice" step="0.01" required>
             </div>
         </div>
         <div class="row">
             <div class="col-6">
                 <label for="listingDate">Listing Date:</label>
-                <input type="date" id="listingDate" name="listingDate"  value="@Model.ListingDate.ToString("yyyy-MM-dd")" required>
+                <input type="date" id="listingDate" name="listingDate" value="@Model.ListingDate.ToString("yyyy-MM-dd")" required>
             </div>
             <div class="col-6">
                 <label for="propertyStatus">Property Status:</label>
                 <select id="propertyStatus" name="propertyStatus" required>
-                    <option value="For sale" @if (Model.PropertyStatus == "For sale") { <text>selected</text> }>Available</option>
-                    <option value="Sold" @if (Model.PropertyStatus == "Sold") { <text>selected</text> }>Sold</option>
-                    <option value="Pending" @if (Model.PropertyStatus == "Pending") { <text>selected</text> }>Pending</option>
+                    <option value="For sale" @if (Model.PropertyStatus == "For sale") { <text> selected</text> }>Available</option>
+                    <option value="Sold" @if (Model.PropertyStatus == "Sold") { <text> selected</text> }>Sold</option>
+                    <option value="Pending" @if (Model.PropertyStatus == "Pending") { <text> selected</text> }>Pending</option>
                 </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-6">
+                <label for="ImageFileName">ImageFileText:</label>
+                @if (Model.ImageFileNames != null)
+                {
+                    var filenames = Model.ImageFileNames.Split(',');
+                    foreach (var filename in filenames)
+                    {
+                        <input type="hidden" name="ExistingImageFileNames" value="@filename">
+                    }
+                }
+                <input type="file" id="ImageFileNames" name="ImageFiles" multiple>
             </div>
         </div>
         <div class="row">

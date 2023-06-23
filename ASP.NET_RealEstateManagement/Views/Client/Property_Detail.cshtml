@@ -1,0 +1,113 @@
+﻿@model ASP.NET_RealEstateManagement.Models.PropertyDetailDTO
+@{
+    ViewBag.Title = "Property_Detail";
+}
+<style>
+    .slider {
+        display: flex;
+        position: relative;
+        width: 1200px;
+        height: 650px;
+        margin: 5em auto;
+        overflow: hidden;
+        box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+    }
+
+        .slider img {
+            display: none;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+    .prev-button,
+    .next-button {
+        position: absolute;
+        top: 50%;
+        border: none;
+        transform: translateY(-50%);
+        color: black;
+        font-size: 36px;
+        text-align: center;
+        border-radius:50%;
+        cursor: pointer;
+    }
+
+    .prev-button {
+        left: 10px;
+    }
+
+    .next-button {
+        right: 10px;
+    }
+
+    .property_Price{
+        position:absolute;
+        right:3%;
+        bottom:0;
+        font-size:3em;
+        font-weight:bold;
+        color:green;
+    }
+    .agant_info {
+        position: absolute;
+        top: 0;
+        left: 2%;
+        font-size: 1.8em;
+        font-weight: bold;
+        color: white;
+    }
+</style>
+
+<div class="slider">
+    @{ string[] imageFileArray = @Model.ImageFileNames.Split(','); }
+    @foreach (var img in imageFileArray)
+    {
+        <img src="@Url.Content("~/Uploads/" + img)" alt="Image" />
+    }
+    @{
+        var singleagent = Model.Agents?.FirstOrDefault(agent => agent.Role == "Agent");
+
+    }
+    <button class="prev-button"><</button>
+    <button class="next-button">></button>
+    <div class="property_Price">$ @Model.PropertyPrice.ToString("N2")</div>
+    @if (singleagent != null)
+    {
+        <div class="agant_info">Contact: @singleagent.Name | @singleagent.Phone | @singleagent.Email </div>
+    }
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var sliderImages = document.querySelectorAll(".slider img");
+        var currentIndex = 0;
+
+        function showImage(index) {
+            // Hide all images
+            sliderImages.forEach(function (image) {
+                image.style.display = "none";
+            });
+
+            // Show the image at the given index
+            sliderImages[index].style.display = "block";
+        }
+
+        function prevImage() {
+            currentIndex = (currentIndex - 1 + sliderImages.length) % sliderImages.length;
+            showImage(currentIndex);
+        }
+
+        function nextImage() {
+            currentIndex = (currentIndex + 1) % sliderImages.length;
+            showImage(currentIndex);
+        }
+
+        // Initial display
+        showImage(currentIndex);
+
+        // Attach event listeners to buttons
+        document.querySelector(".prev-button").addEventListener("click", prevImage);
+        document.querySelector(".next-button").addEventListener("click", nextImage);
+    });
+</script>

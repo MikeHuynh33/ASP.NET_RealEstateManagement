@@ -3,6 +3,7 @@ using Microsoft.VisualBasic.Logging;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Security.Policy;
@@ -86,11 +87,42 @@ namespace ASP.NET_RealEstateManagement.Controllers
         //POST: Admin Adding new Property
         [HttpPost]
         [Route("/Admin/NewProperty")]
-        public ActionResult NewProperty(PropertyDetail property )
+        public ActionResult NewProperty(PropertyDetail property)
         {
             Debug.WriteLine("the json payload is :");
            
             string url = "PropertyData/AddNewProperty";
+            List<string> imageFileNames = new List<string>();
+            try
+            {
+                List<HttpPostedFileBase> ImageFiles = new List<HttpPostedFileBase>();
+                for (int i = 0; i < Request.Files.Count; i++)
+                {
+                    HttpPostedFileBase file = Request.Files[i];
+                    ImageFiles.Add(file);
+                }
+          
+                foreach (HttpPostedFileBase file in ImageFiles)
+                {
+                    // Save the image file to location
+                    string filename = Path.GetFileName(file.FileName);
+                    string path = Server.MapPath("~/Uploads/") + filename;
+                    file.SaveAs(path);
+                    imageFileNames.Add(filename);
+                    Debug.WriteLine("File path: " + path);
+                    Debug.WriteLine(file.ContentLength > 0);
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("An error occurred during file saving: " + ex.Message);
+
+                return RedirectToAction("Error");
+            }
+
+
+            // Assign the image file names to the property object
+            property.ImageFileNames = string.Join(",", imageFileNames);
 
 
             string jsonpayload = jss.Serialize(property);
@@ -100,7 +132,7 @@ namespace ASP.NET_RealEstateManagement.Controllers
             HttpResponseMessage response = client.PostAsync(url, content).Result;
             if (response.IsSuccessStatusCode)
             {
-                return RedirectToAction("/Admin");
+                return RedirectToAction("../Admin");
             }
             else
             {
@@ -114,6 +146,10 @@ namespace ASP.NET_RealEstateManagement.Controllers
         public ActionResult PropertyEdit(int id) {
 
             string url = "PropertyData/FindProperty/" + id;
+
+
+
+
             HttpResponseMessage response = client.GetAsync(url).Result;
             PropertyDetailDTO SelectedProperty = response.Content.ReadAsAsync <PropertyDetailDTO>().Result;
             return View(SelectedProperty); 
@@ -122,8 +158,52 @@ namespace ASP.NET_RealEstateManagement.Controllers
         //Post : Update Property after submit.
         [HttpPost]
         [Route("Admin/PropertyUpdate/{id}")]
-        public ActionResult PropertyUpdate(int id ,PropertyDetail property)
+        public ActionResult PropertyUpdate(int id ,PropertyDetail property, List<string> ExistingImageFileNames)
         {
+            List<string> imageFileNames = new List<string>();
+            Debug.WriteLine(Request.Files.Count);
+            if (Request.Files.Count > 1) {
+                try
+                {
+                    List<HttpPostedFileBase> ImageFiles = new List<HttpPostedFileBase>();
+                    for (int i = 0; i < Request.Files.Count; i++)
+                    {
+                        HttpPostedFileBase file = Request.Files[i];
+                        ImageFiles.Add(file);
+                    }
+                    if (ImageFiles.Count > 0)
+                    {
+                        foreach (HttpPostedFileBase file in ImageFiles)
+                        {
+                            // Save the image file to location
+                            string filename = Path.GetFileName(file.FileName);
+                            string path = Server.MapPath("~/Uploads/") + filename;
+                            file.SaveAs(path);
+                            imageFileNames.Add(filename);
+                            Debug.WriteLine("File path: " + path);
+                            Debug.WriteLine(file.ContentLength > 0);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine("An error occurred during file saving: " + ex.Message);
+
+                    return RedirectToAction("Error");
+                }
+            }
+            
+            // Assign the image file names to the property object.
+            if (imageFileNames != null && imageFileNames.Any())
+            {
+                property.ImageFileNames = string.Join(",", imageFileNames);
+            }
+            else
+            {
+                property.ImageFileNames = string.Join(",", ExistingImageFileNames);
+            }
+
+
             string url = "PropertyData/UpdateProperty/"+ id;
             string jsonpayload = jss.Serialize(property);
             HttpContent content = new StringContent(jsonpayload);
@@ -209,11 +289,9 @@ namespace ASP.NET_RealEstateManagement.Controllers
         [Route("/Admin/AgentDetail/{id}")]
         public ActionResult AgentDetail(int id)
         {
-
-            string url = "PropertyData/FindAgentAssociateWithProperty/" + id;
+            string url = "AgentData/FindAgentAssociateWithProperty/" + id;
             HttpResponseMessage response = client.GetAsync(url).Result;
-            Debug.WriteLine("The response code is ");
-            Debug.WriteLine(response.StatusCode);
+;
             EstateAgentDTO foundagent= response.Content.ReadAsAsync<EstateAgentDTO>().Result;
 
             return View(foundagent);
@@ -234,7 +312,7 @@ namespace ASP.NET_RealEstateManagement.Controllers
             HttpResponseMessage response = client.PostAsync(url, content).Result;
             if (response.IsSuccessStatusCode)
             {
-                return RedirectToAction("/Admin");
+                return RedirectToAction("../Admin");
             }
             else
             {

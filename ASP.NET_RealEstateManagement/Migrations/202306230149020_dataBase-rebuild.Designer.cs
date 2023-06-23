@@ -7,13 +7,13 @@ namespace ASP.NET_RealEstateManagement.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.4.4")]
-    public sealed partial class EstateAgents : IMigrationMetadata
+    public sealed partial class dataBaserebuild : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(EstateAgents));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(dataBaserebuild));
         
         string IMigrationMetadata.Id
         {
-            get { return "202306090605491_EstateAgents"; }
+            get { return "202306230149020_dataBase-rebuild"; }
         }
         
         string IMigrationMetadata.Source

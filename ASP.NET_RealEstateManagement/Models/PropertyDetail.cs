@@ -19,6 +19,7 @@ namespace ASP.NET_RealEstateManagement.Models
         public Double PropertyPrice { get; set; }
         public string PropertyDescription { get; set; }
         public string PropertyStatus { get; set; }
+        public string ImageFileNames { get; set; }
         public DateTime ListingDate { get; set; }
         //declare MXM relationship
         public ICollection<EstateAgent> Agents { get; set;}
@@ -33,6 +34,7 @@ namespace ASP.NET_RealEstateManagement.Models
         public int NumberOfBedrooms { get; set; }
         public int NumberOfBathrooms { get; set; }
         public string Amenities { get; set; }
+        public string ImageFileNames { get; set; }
         public Double PropertyPrice { get; set; }
         public string PropertyDescription { get; set; }
         public string PropertyStatus { get; set; }

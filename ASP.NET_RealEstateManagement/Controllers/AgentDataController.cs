@@ -8,13 +8,15 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
+using System.Web.Script.Serialization;
 
 namespace ASP.NET_RealEstateManagement.Controllers
 {
     public class AgentDataController : ApiController
     {
+        // Connect to local db
         private ApplicationDbContext db = new ApplicationDbContext();
-
+        // Get all Property from database for client to view them.
         [HttpGet]
         [ResponseType(typeof(EstateAgentDTO))]
         public IHttpActionResult ListAgents()
@@ -130,7 +132,7 @@ namespace ASP.NET_RealEstateManagement.Controllers
 
         [HttpPost]
         [ResponseType(typeof(EstateAgent))]
-        public IHttpActionResult AddNewProperty(EstateAgent agent)
+        public IHttpActionResult AddNewAgent(EstateAgent agent)
         {
             if (!ModelState.IsValid)
             {

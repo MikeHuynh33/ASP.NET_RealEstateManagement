@@ -185,6 +185,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\AgentDataController.cs" />
+    <Compile Include="Controllers\ClientController.cs" />
     <Compile Include="Controllers\ClientDataController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
@@ -197,17 +198,9 @@
     <Compile Include="Migrations\202306042217023_InitialCreate.designer.cs">
       <DependentUpon>202306042217023_InitialCreate.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202306090605491_EstateAgents.cs" />
-    <Compile Include="Migrations\202306090605491_EstateAgents.designer.cs">
-      <DependentUpon>202306090605491_EstateAgents.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202306090609293_Property-Estate-m-m.cs" />
-    <Compile Include="Migrations\202306090609293_Property-Estate-m-m.designer.cs">
-      <DependentUpon>202306090609293_Property-Estate-m-m.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202306090806123_PropertyDetails.cs" />
-    <Compile Include="Migrations\202306090806123_PropertyDetails.designer.cs">
-      <DependentUpon>202306090806123_PropertyDetails.cs</DependentUpon>
+    <Compile Include="Migrations\202306230149020_dataBase-rebuild.cs" />
+    <Compile Include="Migrations\202306230149020_dataBase-rebuild.designer.cs">
+      <DependentUpon>202306230149020_dataBase-rebuild.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -290,10 +283,12 @@
     <Content Include="Views\Admin\AgentEdit.cshtml" />
     <Content Include="Views\Admin\DeleteAgentConfirm.cshtml" />
     <Content Include="Views\Admin\AgentDetail.cshtml" />
+    <Content Include="Views\Client\index.cshtml" />
+    <Content Include="Views\Client\Property_Detail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Client\" />
+    <Folder Include="Uploads\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
@@ -308,14 +303,8 @@
     <EmbeddedResource Include="Migrations\202306042217023_InitialCreate.resx">
       <DependentUpon>202306042217023_InitialCreate.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202306090605491_EstateAgents.resx">
-      <DependentUpon>202306090605491_EstateAgents.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202306090609293_Property-Estate-m-m.resx">
-      <DependentUpon>202306090609293_Property-Estate-m-m.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202306090806123_PropertyDetails.resx">
-      <DependentUpon>202306090806123_PropertyDetails.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202306230149020_dataBase-rebuild.resx">
+      <DependentUpon>202306230149020_dataBase-rebuild.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

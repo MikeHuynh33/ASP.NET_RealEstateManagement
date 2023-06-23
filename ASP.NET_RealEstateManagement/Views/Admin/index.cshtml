@@ -10,7 +10,7 @@
         margin-right: 4em;
         display: flex;
         justify-content: center;
-        align-items: center;
+        align-items: flex-start;
         gap: 2em;
         flex-wrap: wrap;
     }
@@ -130,11 +130,10 @@
         cursor: pointer;
     }
 </style>
-<h2>Admin Page</h2>
 @if (isAdmin)
 {
     <div class="Task_container">
-        <div class="Task_Property_Container">
+        <div id="Task_Property_Container" class="Task_Property_Container">
             <h2>Property Details:</h2> <button class="btn_add"><a href="/Admin/AddNewProperty">Add Property</a></button>
             <form method="GET" action="/Admin">
                 <input type="text" name="Searchproperty" />
@@ -147,12 +146,16 @@
                         @property.PropertyAddress
                     </div>
                     <div class="property_btn">
-                        <a href='/Admin/PropertyDetail/@property.PropertyID'>View</a><a  href='/Admin/PropertyEdit/@property.PropertyID'>Edit</a><a  href='/Admin/DeleteConfirm/@property.PropertyID'>Delete</a>
+                        <a href='/Admin/PropertyDetail/@property.PropertyID'>View</a><a href='/Admin/PropertyEdit/@property.PropertyID'>Edit</a><a href='/Admin/DeleteConfirm/@property.PropertyID'>Delete</a>
                     </div>
                 </div>
             }
+            <div id="pagination_property">
+                <button onclick="previousPage_property()">Previous</button>
+                <button onclick="nextPage_property()">Next</button>
+            </div>
         </div>
-        <div class="Task_Agent_Container">
+        <div id="Task_Agent_Container" class="Task_Agent_Container">
             <h2>Agents Details:</h2> <button class="btn_add"><a href="/Admin/AddNewAgent">Add Agent</a></button>
             <form method="GET" action="/Admin">
                 <input type="text" name="Searchproperty" />
@@ -162,14 +165,19 @@
             {
                 <div class="agent_item">
                     <div class="agent_name">
-                        @agent.Name | @agent.Email | @agent.Role
+                        @agent.Name <br /> @agent.Email | @agent.Role
                     </div>
                     <div class="agent_btn">
-                        <a href='/Admin/AgentDetail/@agent.EstateAgentId' >View</a><a href='/Admin/AgentEdit/@agent.EstateAgentId'>Edit</a><a href='/Admin/DeleteAgentConfirm/@agent.EstateAgentId'>Delete</a>
+                        <a href='/Admin/AgentDetail/@agent.EstateAgentId'>View</a><a href='/Admin/AgentEdit/@agent.EstateAgentId'>Edit</a><a href='/Admin/DeleteAgentConfirm/@agent.EstateAgentId'>Delete</a>
                     </div>
                 </div>
             }
+            <div id="pagination">
+                <button onclick="previousPage()">Previous</button>
+                <button onclick="nextPage()">Next</button>
+            </div>
         </div>
+        
     </div>
 }
 else
@@ -178,4 +186,73 @@ else
         ERROR :  You dont have the permisssion as Admin , Please Go back to <a href="/">HOME PAGE</a>
     </div>
 }
+<script>
+    var container = document.getElementById("Task_Agent_Container");
+    var children = container.getElementsByClassName("agent_item");
+    var itemsPerPage = 5;
+    var currentPage = 1;
+
+    function showPage(page) {
+        var startIndex = (page - 1) * itemsPerPage;
+        var endIndex = startIndex + itemsPerPage;
+
+        for (var i = 0; i < children.length; i++) {
+            if (i >= startIndex && i < endIndex) {
+                children[i].style.display = "flex";
+            } else {
+                children[i].style.display = "none";
+            }
+        }
+    }
+
+    function nextPage() {
+        if (currentPage < Math.ceil(children.length / itemsPerPage)) {
+            currentPage++;
+            showPage(currentPage);
+        }
+    }
+
+    function previousPage() {
+        if (currentPage > 1) {
+            currentPage--;
+            showPage(currentPage);
+        }
+    }
+
+    showPage(currentPage);
+
+    // Property Panigation
+    var container_property = document.getElementById("Task_Property_Container");
+    var children_property = container_property.getElementsByClassName("property_item");
+    var itemsPerPage_property = 7;
+    var currentPage_property = 1;
+
+    function showPage_property(page) {
+        var startIndex = (page - 1) * itemsPerPage_property;
+        var endIndex = startIndex + itemsPerPage_property;
+
+        for (var i = 0; i < children_property.length; i++) {
+            if (i >= startIndex && i < endIndex) {
+                children_property[i].style.display = "flex";
+            } else {
+                children_property[i].style.display = "none";
+            }
+        }
+    }
+
+    function nextPage_property() {
+        if (currentPage_property < Math.ceil(children_property.length / itemsPerPage_property)) {
+            currentPage_property++;
+            showPage_property(currentPage_property);
+        }
+    }
+
+    function previousPage_property() {
+        if (currentPage_property > 1) {
+            currentPage_property--;
+            showPage_property(currentPage_property);
+        }
+    }
+    showPage_property(currentPage_property);
+</script>
 
